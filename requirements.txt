@@ -1,5 +1,9 @@
 streamlit==1.23.1
 pandas==2.0.3
-numpy==1.25.3
-setuptools>=65.5.0
-wheel
+numpy==1.25.2
+setuptools>=67.0.0
+wheel>=0.38.0
+scipy>=1.10.0
+matplotlib>=3.7.0
+scikit-learn>=1.2.0
+requests>=2.31.0
