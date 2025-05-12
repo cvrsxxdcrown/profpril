@@ -1,13 +1,3 @@
-import subprocess
-
-try:
-    subprocess.check_call(["pip", "install", "--upgrade", "pip"])
-    subprocess.check_call(["pip", "install", "--upgrade", "setuptools"])
-    subprocess.check_call(["pip", "install", "--upgrade", "wheel"])
-    subprocess.check_call(["pip", "install", "--upgrade", "numpy"])
-except subprocess.CalledProcessError as e:
-    print(f"Ошибка при установке зависимостей: {e}")
-Ц
 import streamlit as st
 import pandas as pd
 
