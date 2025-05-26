@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
 
 # Конфигурация страницы
 st.set_page_config(page_title="Iris Dataset Explorer", layout="centered")
@@ -58,3 +61,39 @@ st.pyplot(fig2)
 if show_summary:
     st.subheader("📈 Статистика")
     st.write(filtered_df.describe())
+
+
+st.subheader("🤖 Машинное обучение — классификация вида цветка")
+
+# Выбор признаков для обучения модели
+features = st.multiselect("Выберите признаки для обучения модели", options=df.columns[:-1], default=list(df.columns[:-1]))
+
+if len(features) < 1:
+    st.warning("Пожалуйста, выберите хотя бы один признак для обучения модели.")
+else:
+    X = filtered_df[features]
+    y = filtered_df["species"]
+
+    # Разделение на train и test
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Обучение модели
+    model = LogisticRegression(max_iter=200)
+    model.fit(X_train, y_train)
+
+    # Оценка модели
+    y_pred = model.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    st.write(f"Точность модели на тестовой выборке: **{acc:.2%}**")
+
+    # Ввод данных для предсказания
+    st.markdown("### Введите параметры для предсказания вида цветка")
+    input_data = {}
+    for feat in features:
+        val = st.number_input(f"{feat}", float(df[feat].min()), float(df[feat].max()), float(df[feat].mean()))
+        input_data[feat] = val
+
+    if st.button("Сделать предсказание"):
+        input_df = pd.DataFrame([input_data])
+        prediction = model.predict(input_df)[0]
+        st.success(f"Предсказанный вид цветка: **{prediction}**")
